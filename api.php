@@ -2,13 +2,14 @@
 header('Content-Type: application/json');
 
 // Credenciales de conexión
-$servername = "localhost";
+$servername = "hopper.proxy.rlwy.net";
 $username = "root";
-$password = "";
-$dbname = "budgetmaster";
+$password = "bAXbctkLKIfxpHxwyrLfSNzbjEjhiovY";
+$dbname = "railway";
+$serverport = "48142";
 
 // Crea la conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname, $serverport);
 
 // Verifica la conexión
 if ($conn->connect_error) {
@@ -230,4 +231,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
 
 $conn->close();
 echo json_encode($response);
+
 ?>
