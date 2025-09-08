@@ -2,6 +2,11 @@
 header('Content-Type: application/json');
 
 // Credenciales de conexión
+/*$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "budgetmaster";*/
+
 $servername = "hopper.proxy.rlwy.net";
 $username = "root";
 $password = "bAXbctkLKIfxpHxwyrLfSNzbjEjhiovY";
@@ -217,7 +222,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             }
             break;
         case 'deleteConcepto':
-            // No se necesita validación aquí, ya que Conceptos no tiene tablas hijas
             $id = (int)$_POST['id'];
             $sql = "DELETE FROM conceptos WHERE id = $id";
             if ($conn->query($sql) === TRUE) {
@@ -226,10 +230,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
                 $response = ['success' => false, 'message' => 'Error: ' . $conn->error];
             }
             break;
+
+        default:
+            $response = ['success' => false, 'message' => 'Acción no válida: ' . $action];
+            break;
     }
 }
 
 $conn->close();
 echo json_encode($response);
-
 ?>
