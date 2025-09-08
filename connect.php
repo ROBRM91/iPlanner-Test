@@ -14,8 +14,10 @@ if ($conn->connect_error) {
     die("❌ ¡Error de conexión!: " . $conn->connect_error);
 } else {
     // Redirige al usuario a la página de catálogos
-    header("Location: datosbase.html");
+    // header("Location: datosbase.html");
+    echo "Conexión exitosa a base de datos ", $dbname;
     exit(); // Es importante usar exit() después de una redirección
 }
 
 ?>
+
