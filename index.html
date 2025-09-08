@@ -3,191 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Presupuestos</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Conexión a Base de Datos</title>
+    <link rel="stylesheet" href="styles_login.css">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <script src="register.js"></script>
+    
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <h1 class="logo">BudgetApp</h1>
-            <ul class="nav-links">
-                <li><a href="#dashboard-section">Dashboard</a></li>
-                <li><a href="#forms-section">Formularios</a></li>
-                <li><a href="#transactions-section">Transacciones</a></li>
-            </ul>
-        </nav>
-    </header>
+    <div class="container">
+        <h1>Conectar a MySQL</h1>
+        <form action="connect.php" method="POST">
+            <label for="server_name">Nombre Servidor:</label>
+            <input type="text" id="server_name" name="server_name" required>
 
-    <main class="container">
-        <section id="dashboard-section" class="section">
-            <h2>Dashboard del Mes</h2>
-            <div class="dashboard-cards">
-                <div class="card card-ingresos">
-                    <h3>Ingresos Totales</h3>
-                    <p id="total-ingresos" class="valor-ingresos">$0.00</p>
-                </div>
-                <div class="card card-gastos">
-                    <h3>Gastos Totales</h3>
-                    <p id="total-gastos" class="valor-gastos">$0.00</p>
-                </div>
-                <div class="card card-saldo">
-                    <h3>Saldo Disponible</h3>
-                    <p id="saldo-disponible" class="valor-saldo">$0.00</p>
-                </div>
-            </div>
-        </section>
+            <label for="user_name">Nombre Usuario:</label>
+            <input type="text" id="user_name" name="user_name" required>
 
-        <section id="forms-section" class="section">
-            <h2>Registro de Transacciones</h2>
-            <div class="forms-container">
-                <form id="form-ingresos" class="form">
-                    <h3>Registrar Ingreso</h3>
-                    <div class="form-group">
-                        <label for="ingreso-fecha">Fecha:</label>
-                        <input type="date" id="ingreso-fecha" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="ingreso-monto">Monto:</label>
-                        <input type="number" id="ingreso-monto" step="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="ingreso-categoria">Categoría:</label>
-                        <select id="ingreso-categoria" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="ingreso-subcategoria">Subcategoría:</label>
-                        <select id="ingreso-subcategoria"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="ingreso-descripcion">Descripción:</label>
-                        <textarea id="ingreso-descripcion"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-ingresos">Agregar Ingreso</button>
-                </form>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password">
 
-                <form id="form-gastos" class="form">
-                    <h3>Registrar Gasto</h3>
-                    <div class="form-group">
-                        <label for="gasto-fecha">Fecha:</label>
-                        <input type="date" id="gasto-fecha" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="gasto-monto">Monto:</label>
-                        <input type="number" id="gasto-monto" step="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="gasto-categoria">Categoría:</label>
-                        <select id="gasto-categoria" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="gasto-subcategoria">Subcategoría:</label>
-                        <select id="gasto-subcategoria"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="gasto-descripcion">Descripción:</label>
-                        <textarea id="gasto-descripcion"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-gastos">Agregar Gasto</button>
-                </form>
+            <label for="db_name">Nombre Base de Datos:</label>
+            <input type="text" id="db_name" name="db_name" required>
 
-                <form id="form-pagos" class="form">
-                    <h3>Registrar Pago</h3>
-                    <div class="form-group">
-                        <label for="pago-fecha">Fecha de Vencimiento:</label>
-                        <input type="date" id="pago-fecha" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="pago-monto">Monto:</label>
-                        <input type="number" id="pago-monto" step="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="pago-concepto">Concepto:</label>
-                        <select id="pago-concepto" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="pago-descripcion">Descripción:</label>
-                        <textarea id="pago-descripcion"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-pagos">Agregar Pago</button>
-                </form>
-            </div>
-        </section>
-
-        <section id="transactions-section" class="section">
-            <h2>Historial de Transacciones</h2>
-            <div class="filters">
-                <div class="filter-group">
-                    <label for="filtro-fecha">Filtrar por Fecha:</label>
-                    <input type="date" id="filtro-fecha">
-                </div>
-                <div class="filter-group">
-                    <label for="filtro-tipo">Filtrar por Tipo:</label>
-                    <select id="filtro-tipo">
-                        <option value="todos">Todos</option>
-                        <option value="ingreso">Ingresos</option>
-                        <option value="gasto">Gastos</option>
-                        <option value="pago">Pagos</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="filtro-categoria">Filtrar por Categoría:</label>
-                    <select id="filtro-categoria">
-                        <option value="todas">Todas</option>
-                    </select>
-                </div>
-            </div>
-            <div class="table-container">
-                <table id="tabla-transacciones">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Tipo</th>
-                            <th>Categoría / Concepto</th>
-                            <th>Subcategoría</th>
-                            <th>Descripción</th>
-                            <th>Monto</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
-
-    <div id="modal-edicion" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Editar Transacción</h2>
-            <form id="form-edicion">
-                <input type="hidden" id="edit-id">
-                <div class="form-group">
-                    <label for="edit-fecha">Fecha:</label>
-                    <input type="date" id="edit-fecha" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-monto">Monto:</label>
-                    <input type="number" id="edit-monto" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-categoria">Categoría / Concepto:</label>
-                    <select id="edit-categoria"></select>
-                </div>
-                <div class="form-group">
-                    <label for="edit-subcategoria">Subcategoría:</label>
-                    <select id="edit-subcategoria"></select>
-                </div>
-                <div class="form-group">
-                    <label for="edit-descripcion">Descripción:</label>
-                    <textarea id="edit-descripcion"></textarea>
-                </div>
-                <button type="submit" class="btn">Guardar Cambios</button>
-            </form>
-        </div>
+            <button type="submit">CONECTAR</button>
+        </form>
     </div>
-
-    <script src="main.js"></script>
 </body>
 </html>

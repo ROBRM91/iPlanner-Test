@@ -1,0 +1,21 @@
+{
+  "name": "App de Conexión MySQL",
+  "short_name": "PWA MySQL",
+  "description": "Una aplicación web para conectar a bases de datos MySQL.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#d1d1d1",
+  "theme_color": "#6a89cc",
+  "icons": [
+    {
+      "src": "iconos/base-de-datos.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

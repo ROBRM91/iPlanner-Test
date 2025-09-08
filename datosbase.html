@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base de Datos - Catálogos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-wallet app-icon"></i>
+            <div class="app-info">
+                <span class="app-name">BudgetMaster</span>
+                <span class="app-tagline">Gestión Financiera Personal</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <span class="nav-heading">NAVEGACIÓN</span>
+            <ul>
+                <li><a href="dashboard.html"><i class="fas fa-th-large nav-icon"></i><div class="nav-text">Dashboard<small>Resumen mensual</small></div></a></li>
+                <li><a href="transacciones.html"><i class="fas fa-exchange-alt nav-icon"></i><div class="nav-text">Transacciones<small>Gestión de movimientos</small></div></a></li>
+                <li class="active"><a href="#"><i class="fas fa-database nav-icon"></i><div class="nav-text">Base de Datos<small>Catálogos del sistema</small></div></a></li>
+                <li><a href="reportes.html"><i class="fas fa-chart-pie nav-icon"></i><div class="nav-text">Reportes<small>Informes y estadísticas</small></div></a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="container">
+        <header class="page-header">
+            <div class="header-content">
+                <i class="fas fa-database header-icon"></i>
+                <div class="header-text">
+                    <h1 class="page-title">Base de Datos</h1>
+                    <p class="page-subtitle">Administra los catálogos del sistema</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="header-title-container">
+                    <i class="fas fa-chart-line card-icon"></i>
+                    <h2>Tipos de Movimiento</h2>
+                </div>
+                <button class="add-btn" data-target="#tipos-movimiento-content" data-form="tipos-movimiento-form">
+                    <i class="fas fa-plus"></i> <span class="btn-text">Mostrar</span>
+                </button>
+            </div>
+            <div class="card-body" id="tipos-movimiento-content" style="display: none;">
+                <form class="data-form" id="tipos-movimiento-form">
+                    <div class="form-group">
+                        <label for="id-tipo-movimiento">ID Tipo Movimiento:</label>
+                        <input type="text" id="id-tipo-movimiento" name="id" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo-movimiento">Tipo Movimiento:</label>
+                        <input type="text" id="tipo-movimiento" name="nombre" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary-btn"><i class="fas fa-save"></i> Guardar</button>
+                        <button type="reset" class="btn secondary-btn"><i class="fas fa-eraser"></i> Limpiar</button>
+                    </div>
+                </form>
+
+                <div class="data-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo de Movimiento</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="header-title-container">
+                    <i class="fas fa-folder card-icon"></i>
+                    <h2>Tipos de Costo</h2>
+                </div>
+                <button class="add-btn" data-target="#tipos-costo-content" data-form="tipos-costo-form">
+                    <i class="fas fa-plus"></i> <span class="btn-text">Mostrar</span>
+                </button>
+            </div>
+            <div class="card-body" id="tipos-costo-content" style="display: none;">
+                <form class="data-form" id="tipos-costo-form">
+                    <div class="form-group">
+                        <label for="id-tipo-costo">ID Tipo Costo:</label>
+                        <input type="text" id="id-tipo-costo" name="id" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo-costo">Tipo Costo:</label>
+                        <input type="text" id="tipo-costo" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id-tipo-movimiento-fk">Tipo Movimiento:</label>
+                        <select id="id-tipo-movimiento-fk" name="id_tipo_movimiento" required>
+                            <option value="">Seleccione un tipo de movimiento</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary-btn"><i class="fas fa-save"></i> Guardar</button>
+                        <button type="reset" class="btn secondary-btn"><i class="fas fa-eraser"></i> Limpiar</button>
+                    </div>
+                </form>
+
+                <div class="data-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo de Costo</th>
+                                <th>Tipo de Movimiento</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="header-title-container">
+                    <i class="fas fa-tag card-icon"></i>
+                    <h2>Categorías</h2>
+                </div>
+                <button class="add-btn" data-target="#categorias-content" data-form="categorias-form">
+                    <i class="fas fa-plus"></i> <span class="btn-text">Mostrar</span>
+                </button>
+            </div>
+            <div class="card-body" id="categorias-content" style="display: none;">
+                <form class="data-form" id="categorias-form">
+                    <div class="form-group">
+                        <label for="id-categoria">ID Categoría:</label>
+                        <input type="text" id="id-categoria" name="id" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoria">Categoría:</label>
+                        <input type="text" id="categoria" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id-tipo-movimiento-fk-cat">Tipo Movimiento:</label>
+                        <select id="id-tipo-movimiento-fk-cat" name="id_tipo_movimiento" required>
+                            <option value="">Seleccione un tipo de movimiento</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="id-tipo-costo-fk-cat">Tipo Costo:</label>
+                        <select id="id-tipo-costo-fk-cat" name="id_tipo_costo" required disabled>
+                            <option value="">Primero seleccione un tipo de movimiento</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary-btn"><i class="fas fa-save"></i> Guardar</button>
+                        <button type="reset" class="btn secondary-btn"><i class="fas fa-eraser"></i> Limpiar</button>
+                    </div>
+                </form>
+
+                <div class="data-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th>Tipo Movimiento</th>
+                                <th>Tipo Costo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="header-title-container">
+                    <i class="fas fa-book card-icon"></i>
+                    <h2>Conceptos</h2>
+                </div>
+                <button class="add-btn" data-target="#conceptos-content" data-form="conceptos-form">
+                    <i class="fas fa-plus"></i> <span class="btn-text">Mostrar</span>
+                </button>
+            </div>
+            <div class="card-body" id="conceptos-content" style="display: none;">
+                <form class="data-form" id="conceptos-form">
+                    <div class="form-group">
+                        <label for="id-concepto">ID Concepto:</label>
+                        <input type="text" id="id-concepto" name="id" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="concepto">Concepto:</label>
+                        <input type="text" id="concepto" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id-tipo-movimiento-fk-con">Tipo Movimiento:</label>
+                        <select id="id-tipo-movimiento-fk-con" required>
+                            <option value="">Seleccione un tipo de movimiento</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="id-tipo-costo-fk-con">Tipo Costo:</label>
+                        <select id="id-tipo-costo-fk-con" required disabled>
+                            <option value="">Primero seleccione un tipo de movimiento</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="id-categoria-fk-con">Categoría:</label>
+                        <select id="id-categoria-fk-con" name="id_categoria" required disabled>
+                            <option value="">Primero seleccione un tipo de costo</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary-btn"><i class="fas fa-save"></i> Guardar</button>
+                        <button type="reset" class="btn secondary-btn"><i class="fas fa-eraser"></i> Limpiar</button>
+                    </div>
+                </form>
+
+                <div class="data-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Categoría</th>
+                                <th>Tipo Movimiento</th>
+                                <th>Tipo Costo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <button class="menu-toggle" aria-label="Toggle navigation menu">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            await cargarDatos();
+            configurarFormularios();
+            configurarBotonesAgregar();
+        });
+
+        let tiposMovimientoData = [];
+        let tiposCostoData = [];
+        let categoriasData = [];
+        let conceptosData = [];
+
+        async function cargarDatos() {
+            try {
+                const [
+                    responseTiposMov,
+                    responseTiposCosto,
+                    responseCategorias,
+                    responseConceptos
+                ] = await Promise.all([
+                    fetch('api.php?action=getTiposMovimiento'),
+                    fetch('api.php?action=getTiposCosto'),
+                    fetch('api.php?action=getCategorias'),
+                    fetch('api.php?action=getConceptos')
+                ]);
+
+                const resultTiposMov = await responseTiposMov.json();
+                const resultTiposCosto = await responseTiposCosto.json();
+                const resultCategorias = await responseCategorias.json();
+                const resultConceptos = await responseConceptos.json();
+
+                if (resultTiposMov.success) {
+                    tiposMovimientoData = resultTiposMov.data;
+                    llenarTablaTiposMovimiento(tiposMovimientoData);
+                    fillSelect(document.getElementById('id-tipo-movimiento-fk'), tiposMovimientoData, 'Seleccione un tipo de movimiento');
+                    fillSelect(document.getElementById('id-tipo-movimiento-fk-cat'), tiposMovimientoData, 'Seleccione un tipo de movimiento');
+                    fillSelect(document.getElementById('id-tipo-movimiento-fk-con'), tiposMovimientoData, 'Seleccione un tipo de movimiento');
+                }
+
+                if (resultTiposCosto.success) {
+                    tiposCostoData = resultTiposCosto.data;
+                    llenarTablaTiposCosto(tiposCostoData);
+                }
+
+                if (resultCategorias.success) {
+                    categoriasData = resultCategorias.data;
+                    llenarTablaCategorias(categoriasData);
+                }
+
+                if (resultConceptos.success) {
+                    conceptosData = resultConceptos.data;
+                    llenarTablaConceptos(conceptosData);
+                }
+            } catch (error) {
+                console.error('Error al cargar datos del servidor:', error);
+            }
+        }
+        
+        function llenarTablaTiposMovimiento(datos) {
+            const tbody = document.querySelector('#tipos-movimiento-content table tbody');
+            tbody.innerHTML = '';
+            
+            datos.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.nombre}</td>
+                    <td class="actions">
+                        <button class="btn-action edit-btn" data-id="${item.id}" data-table="tipos_movimiento"><i class="fas fa-pen"></i></button>
+                        <button class="btn-action delete-btn" data-id="${item.id}" data-table="tipos_movimiento"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        function llenarTablaTiposCosto(datos) {
+            const tbody = document.querySelector('#tipos-costo-content table tbody');
+            tbody.innerHTML = '';
+            
+            datos.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.nombre}</td>
+                    <td>${item.tipo_movimiento}</td>
+                    <td class="actions">
+                        <button class="btn-action edit-btn" data-id="${item.id}" data-table="tipos_costo"><i class="fas fa-pen"></i></button>
+                        <button class="btn-action delete-btn" data-id="${item.id}" data-table="tipos_costo"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        function llenarTablaCategorias(datos) {
+            const tbody = document.querySelector('#categorias-content table tbody');
+            tbody.innerHTML = '';
+            
+            datos.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.nombre}</td>
+                    <td>${item.tipo_movimiento}</td>
+                    <td>${item.tipo_costo}</td>
+                    <td class="actions">
+                        <button class="btn-action edit-btn" data-id="${item.id}" data-table="categorias"><i class="fas fa-pen"></i></button>
+                        <button class="btn-action delete-btn" data-id="${item.id}" data-table="categorias"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        function llenarTablaConceptos(datos) {
+            const tbody = document.querySelector('#conceptos-content table tbody');
+            tbody.innerHTML = '';
+            
+            datos.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.nombre}</td>
+                    <td>${item.categoria}</td>
+                    <td>${item.tipo_movimiento}</td>
+                    <td>${item.tipo_costo}</td>
+                    <td class="actions">
+                        <button class="btn-action edit-btn" data-id="${item.id}" data-table="conceptos"><i class="fas fa-pen"></i></button>
+                        <button class="btn-action delete-btn" data-id="${item.id}" data-table="conceptos"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        function fillSelect(selectElement, data, placeholderText, selectedValue = null) {
+            selectElement.innerHTML = `<option value="">${placeholderText}</option>`;
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = item.nombre;
+                if (item.id == selectedValue) {
+                    option.selected = true;
+                }
+                selectElement.appendChild(option);
+            });
+            selectElement.disabled = false;
+        }
+
+        function filterAndFillSelect(sourceSelectId, targetSelectId, data, fkName, placeholderText, selectedValue = null) {
+            const sourceSelect = document.getElementById(sourceSelectId);
+            const targetSelect = document.getElementById(targetSelectId);
+
+            const id = sourceSelect.value;
+            if (id) {
+                const filteredData = data.filter(item => item[fkName] == id);
+                fillSelect(targetSelect, filteredData, placeholderText, selectedValue);
+            } else {
+                targetSelect.innerHTML = `<option value="">${placeholderText}</option>`;
+                targetSelect.disabled = true;
+            }
+        }
+
+        // Eventos para listas en cascada
+        document.getElementById('id-tipo-movimiento-fk-cat').addEventListener('change', function() {
+            filterAndFillSelect('id-tipo-movimiento-fk-cat', 'id-tipo-costo-fk-cat', tiposCostoData, 'id_tipo_movimiento', 'Primero seleccione un tipo de movimiento');
+        });
+        
+        document.getElementById('id-tipo-movimiento-fk-con').addEventListener('change', function() {
+            filterAndFillSelect('id-tipo-movimiento-fk-con', 'id-tipo-costo-fk-con', tiposCostoData, 'id_tipo_movimiento', 'Primero seleccione un tipo de movimiento');
+        });
+
+        document.getElementById('id-tipo-costo-fk-con').addEventListener('change', function() {
+            filterAndFillSelect('id-tipo-costo-fk-con', 'id-categoria-fk-con', categoriasData, 'id_tipo_costo', 'Primero seleccione un tipo de costo');
+        });
+
+        function configurarFormularios() {
+            // Manejador genérico para todos los formularios
+            const forms = document.querySelectorAll('.data-form');
+            forms.forEach(form => {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    const formId = this.id;
+                    let action = '';
+
+                    if (formId === 'tipos-movimiento-form') {
+                        action = formData.get('id') ? 'editTipoMovimiento' : 'addTipoMovimiento';
+                    } else if (formId === 'tipos-costo-form') {
+                        action = formData.get('id') ? 'editTipoCosto' : 'addTipoCosto';
+                    } else if (formId === 'categorias-form') {
+                        action = formData.get('id') ? 'editCategoria' : 'addCategoria';
+                    } else if (formId === 'conceptos-form') {
+                        action = formData.get('id') ? 'editConcepto' : 'addConcepto';
+                    }
+
+                    formData.append('action', action);
+
+                    const response = await fetch('api.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const result = await response.json();
+                    
+                    alert(result.message);
+                    if (result.success) {
+                        this.reset();
+                        document.querySelector(`button[data-form="${formId}"]`).click(); // Oculta el formulario
+                        cargarDatos();
+                    }
+                });
+            });
+
+            // Lógica para botones de editar y eliminar
+            document.addEventListener('click', async function(e) {
+                if (e.target.closest('.edit-btn')) {
+                    const btn = e.target.closest('.edit-btn');
+                    const id = btn.dataset.id;
+                    const table = btn.dataset.table;
+                    let data = [];
+                    let formId = '';
+
+                    if (table === 'tipos_movimiento') {
+                        data = tiposMovimientoData;
+                        formId = 'tipos-movimiento-form';
+                    } else if (table === 'tipos_costo') {
+                        data = tiposCostoData;
+                        formId = 'tipos-costo-form';
+                    } else if (table === 'categorias') {
+                        data = categoriasData;
+                        formId = 'categorias-form';
+                    } else if (table === 'conceptos') {
+                        data = conceptosData;
+                        formId = 'conceptos-form';
+                    }
+                    
+                    const record = data.find(item => item.id == id);
+                    if (record) {
+                        const formContainer = document.querySelector(`button[data-form="${formId}"]`).getAttribute('data-target');
+                        document.querySelector(formContainer).style.display = 'block';
+                        
+                        const form = document.getElementById(formId);
+                        
+                        // Llenar campos de texto y el ID
+                        form.querySelector('[name="id"]').value = record.id;
+                        form.querySelector('[name="nombre"]').value = record.nombre;
+                        
+                        // Lógica para listas en cascada al editar
+                        if (table === 'tipos_costo') {
+                            fillSelect(document.getElementById('id-tipo-movimiento-fk'), tiposMovimientoData, 'Seleccione un tipo de movimiento', record.id_tipo_movimiento);
+                        } else if (table === 'categorias') {
+                            fillSelect(document.getElementById('id-tipo-movimiento-fk-cat'), tiposMovimientoData, 'Seleccione un tipo de movimiento', record.id_tipo_movimiento);
+                            
+                            const selectTipoCosto = document.getElementById('id-tipo-costo-fk-cat');
+                            const filteredData = tiposCostoData.filter(tc => tc.id_tipo_movimiento == record.id_tipo_movimiento);
+                            fillSelect(selectTipoCosto, filteredData, 'Seleccione un tipo de costo', record.id_tipo_costo);
+                        } else if (table === 'conceptos') {
+                            // Obtener la categoría del concepto para rellenar los selects padre
+                            const categoriaRecord = categoriasData.find(c => c.id == record.id_categoria);
+                            if (categoriaRecord) {
+                                // 1. Llenar Tipo Movimiento
+                                fillSelect(document.getElementById('id-tipo-movimiento-fk-con'), tiposMovimientoData, 'Seleccione un tipo de movimiento', categoriaRecord.id_tipo_movimiento);
+
+                                // 2. Llenar Tipo Costo
+                                const selectTipoCosto = document.getElementById('id-tipo-costo-fk-con');
+                                const filteredCosto = tiposCostoData.filter(tc => tc.id_tipo_movimiento == categoriaRecord.id_tipo_movimiento);
+                                fillSelect(selectTipoCosto, filteredCosto, 'Seleccione un tipo de costo', categoriaRecord.id_tipo_costo);
+                                
+                                // 3. Llenar Categoría
+                                const selectCategoria = document.getElementById('id-categoria-fk-con');
+                                const filteredCategoria = categoriasData.filter(c => c.id_tipo_costo == categoriaRecord.id_tipo_costo);
+                                fillSelect(selectCategoria, filteredCategoria, 'Seleccione una categoría', record.id_categoria);
+                            }
+                        }
+                    }
+                } else if (e.target.closest('.delete-btn')) {
+                    const btn = e.target.closest('.delete-btn');
+                    const id = btn.dataset.id;
+                    const table = btn.dataset.table;
+                    const action = `delete${table.charAt(0).toUpperCase() + table.slice(1)}`;
+                    
+                    if (confirm(`¿Estás seguro de eliminar el registro con ID ${id} de la tabla ${table}?`)) {
+                        const formData = new FormData();
+                        formData.append('action', action);
+                        formData.append('id', id);
+
+                        const response = await fetch('api.php', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const result = await response.json();
+                        alert(result.message);
+                        if (result.success) {
+                            cargarDatos();
+                        }
+                    }
+                }
+            });
+        }
+        
+        function configurarBotonesAgregar() {
+            const addButtons = document.querySelectorAll('.add-btn');
+            addButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const targetContent = document.querySelector(targetId);
+                    const btnText = this.querySelector('.btn-text');
+                    const btnIcon = this.querySelector('i');
+                    const form = targetContent.querySelector('form');
+                    
+                    if (targetContent.style.display === 'none' || targetContent.style.display === '') {
+                        targetContent.style.display = 'block';
+                        btnText.textContent = 'Ocultar';
+                        btnIcon.className = 'fas fa-times';
+                    } else {
+                        targetContent.style.display = 'none';
+                        btnText.textContent = 'Mostrar';
+                        btnIcon.className = 'fas fa-plus';
+                        if (form) {
+                            form.reset();
+                        }
+                    }
+                });
+            });
+        }
+
+        const menuToggle = document.querySelector('.menu-toggle');
+        const body = document.body;
+        const sidebar = document.querySelector('.sidebar');
+        const mainContainer = document.querySelector('.container');
+
+        menuToggle.addEventListener('click', () => {
+            body.classList.toggle('sidebar-open');
+        });
+
+        mainContainer.addEventListener('click', () => {
+            if (body.classList.contains('sidebar-open')) {
+                body.classList.remove('sidebar-open');
+            }
+        });
+
+        sidebar.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+    </script>
+    
+</body>
+</html>
