@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPlanner - Catálogos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Nueva paleta de colores basada en las imágenes */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-bg: #f8f9fa;
+            --dark-text: #2c3e50;
+            --light-text: #7f8c8d;
+            --border-color: #ddd;
+        }
+        
+        /* Estilos generales */
+        body {
+            background-color: #f5f7f9;
+            color: var(--dark-text);
+        }
+        
+        .sidebar {
+            background: linear-gradient(135deg, var(--primary-color), #1a2530);
+        }
+        
+        .app-name {
+            color: white;
+        }
+        
+        .app-tagline {
+            color: #bdc3c7;
+        }
+        
+        .sidebar-nav a {
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .sidebar-nav a:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .sidebar-nav .active a {
+            background: rgba(52, 152, 219, 0.2);
+            color: white;
+        }
+        
+        .page-title {
+            color: var(--primary-color);
+        }
+        
+        .page-subtitle {
+            color: var(--light-text);
+        }
+        
+        /* Estilos de tarjetas */
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background-color: var(--light-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header-title-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-icon {
+            font-size: 18px;
+            color: var(--secondary-color);
+            margin-right: 10px;
+        }
+        
+        .card-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        /* Botón Agregar */
+        .add-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+        
+        .add-btn i {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+        
+        .add-btn:hover {
+            background: #2980b9;
+        }
+        
+        /* Estilos para formularios */
+        .data-form {
+            background-color: var(--light-bg);
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--secondary-color);
+            display: none;
+        }
+        
+        .data-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--dark-text);
+            font-size: 14px;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-group input:read-only {
+            background-color: #e9ecef;
+            color: var(--light-text);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* Botones */
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .btn i {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+        
+        .primary-btn {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .primary-btn:hover {
+            background: #219653;
+        }
+        
+        .secondary-btn {
+            background: var(--light-text);
+            color: white;
+        }
+        
+        .secondary-btn:hover {
+            background: #5a6268;
+        }
+        
+        /* Estilos para tablas */
+        .data-list {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        th {
+            background-color: var(--light-bg);
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* Acciones en tablas */
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-action {
+            padding: 6px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 12px;
+        }
+        
+        .edit-btn {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .edit-btn:hover {
+            background: #e67e22;
+        }
+        
+        .delete-btn {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+        
+        .empty-message {
+            text-align: center;
+            padding: 20px;
+            color: var(--light-text);
+            font-style: italic;
+        }
+        
+        /* Layout de 2x2 para las secciones */
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 992px) {
+            .catalog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-wallet app-icon"></i>
+            <div class="app-info">
+                <span class="app-name">iPlanner</span>
+                <span class="app-tagline">Gestión Financiera Personal</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <span class="nav-heading">MENÚ</span>
+            <ul>
+                <li><a href="iplanner-dashboard.html"><i class="fas fa-th-large nav-icon"></i><div class="nav-text">Dashboard<small>Resumen mensual</small></div></a></li>
+                <li><a href="iplanner-transacciones.html"><i class="fas fa-exchange-alt nav-icon"></i><div class="nav-text">Transacciones<small>Gestión de movimientos</small></div></a></li>
+                <li class="active"><a href="#"><i class="fas fa-database nav-icon"></i><div class="nav-text">Datos Base<small>Catálogos del sistema</small></div></a></li>
+                <li><a href="iplanner-reportes.html"><i class="fas fa-chart-pie nav-icon"></i><div class="nav-text">Reportes<small>Informes y estadísticas</small></div></a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="container">
+        <header class="page-header">
+            <div class="header-content">
+                <i class="fas fa-database header-icon"></i>
+                <div class="header-text">
+                    <h1 class="page-title">Datos Base</h1>
+                    <p class="page-subtitle">Administra los catálogos del sistema</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="catalog-grid">
+            <!-- Sección superior izquierda: Tipos de Movimiento -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="header-title-container">
+                        <i class="fas fa-chart-line card-icon"></i>
+                        <h2>Tipos de Movimiento</h2>
+                    </div>
+                    <button class="add-btn" data-target="tipos-movimiento-form">
+                        <i class="fas fa-plus"></i> <span class="btn-text">Agregar</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <form class="data-form" id="tipos-movimiento-form">
+                        <div class="form-group">
+                            <label for="id-tipo-movimiento">ID Tipo Movimiento:</label>
+                            <input type="text" id="id-tipo-movimiento" name="id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo-movimiento">Tipo Movimiento:</label>
+                            <input type="text" id="tipo-movimiento" name="nombre" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn secondary-btn cancel-btn"><i class="fas fa-times"></i> Cancelar</button>
+                            <button type="submit" class="btn primary-btn"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
+                    </form>
+
+                    <div class="data-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tipo de Movimiento</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--<tr>
+                                    <td colspan="3" class="empty-message">No hay tipos de movimiento registrados</td>
+                                </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección superior derecha: Tipos de Costo -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="header-title-container">
+                        <i class="fas fa-folder card-icon"></i>
+                        <h2>Tipos de Costo</h2>
+                    </div>
+                    <button class="add-btn" data-target="tipos-costo-form">
+                        <i class="fas fa-plus"></i> <span class="btn-text">Agregar</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <form class="data-form" id="tipos-costo-form">
+                        <div class="form-group">
+                            <label for="id-tipo-costo">ID Tipo Costo:</label>
+                            <input type="text" id="id-tipo-costo" name="id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo-costo">Tipo Costo:</label>
+                            <input type="text" id="tipo-costo" name="nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="id-tipo-movimiento-fk">Tipo Movimiento:</label>
+                            <select id="id-tipo-movimiento-fk" name="id_tipo_movimiento" required>
+                                <option value="">Seleccione un tipo de movimiento</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn secondary-btn cancel-btn"><i class="fas fa-times"></i> Cancelar</button>
+                            <button type="submit" class="btn primary-btn"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
+                    </form>
+
+                    <div class="data-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tipo de Costo</th>
+                                    <th>Tipo de Movimiento</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--<tr>
+                                    <td colspan="4" class="empty-message">No hay tipos de costo registrados</td>
+                                </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección inferior izquierda: Categorías -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="header-title-container">
+                        <i class="fas fa-tag card-icon"></i>
+                        <h2>Categorías</h2>
+                    </div>
+                    <button class="add-btn" data-target="categorias-form">
+                        <i class="fas fa-plus"></i> <span class="btn-text">Agregar</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <form class="data-form" id="categorias-form">
+                        <div class="form-group">
+                            <label for="id-categoria">ID Categoría:</label>
+                            <input type="text" id="id-categoria" name="id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="categoria">Categoría:</label>
+                            <input type="text" id="categoria" name="nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="id-tipo-movimiento-fk-cat">Tipo Movimiento:</label>
+                            <select id="id-tipo-movimiento-fk-cat" name="id_tipo_movimiento" required>
+                                <option value="">Seleccione un tipo de movimiento</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="id-tipo-costo-fk-cat">Tipo Costo:</label>
+                            <select id="id-tipo-costo-fk-cat" name="id_tipo_costo" required disabled>
+                                <option value="">Primero seleccione un tipo de movimiento</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn secondary-btn cancel-btn"><i class="fas fa-times"></i> Cancelar</button>
+                            <button type="submit" class="btn primary-btn"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
+                    </form>
+
+                    <div class="data-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Categoría</th>
+                                    <th>Tipo Movimiento</th>
+                                    <th>Tipo Costo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--<tr>
+                                    <td colspan="5" class="empty-message">No hay categorías registradas</td>
+                                </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección inferior derecha: Conceptos -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="header-title-container">
+                        <i class="fas fa-book card-icon"></i>
+                        <h2>Conceptos</h2>
+                    </div>
+                    <button class="add-btn" data-target="conceptos-form">
+                        <i class="fas fa-plus"></i> <span class="btn-text">Agregar</span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <form class="data-form" id="conceptos-form">
+                        <div class="form-group">
+                            <label for="id-concepto">ID Concepto:</label>
+                            <input type="text" id="id-concepto" name="id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="concepto">Concepto:</label>
+                            <input type="text" id="concepto" name="nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="id-tipo-movimiento-fk-con">Tipo Movimiento:</label>
+                            <select id="id-tipo-movimiento-fk-con" required>
+                                <option value="">Seleccione un tipo de movimiento</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="id-tipo-costo-fk-con">Tipo Costo:</label>
+                            <select id="id-tipo-costo-fk-con" required disabled>
+                                <option value="">Primero seleccione un tipo de movimiento</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="id-categoria-fk-con">Categoría:</label>
+                            <select id="id-categoria-fk-con" name="id_categoria" required disabled>
+                                <option value="">Primero seleccione un tipo de costo</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn secondary-btn cancel-btn"><i class="fas fa-times"></i> Cancelar</button>
+                            <button type="submit" class="btn primary-btn"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
+                    </form>
+
+                    <div class="data-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Concepto</th>
+                                    <th>Categoría</th>
+                                    <th>Tipo Movimiento</th>
+                                    <th>Tipo Costo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--<tr>
+                                    <td colspan="6" class="empty-message">No hay conceptos registrados</td>
+                                </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <button class="menu-toggle" aria-label="Toggle navigation menu">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generar IDs automáticos para nuevos registros
+            function generateId(prefix) {
+                const randomNum = Math.floor(Math.random() * 900) + 100;
+                return `${prefix}${randomNum}`;
+            }
+            
+            // Manejar clic en botones "Agregar"
+            document.querySelectorAll('.add-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const targetForm = document.getElementById(targetId);
+                    
+                    // Generar ID automático según el tipo de formulario
+                    if (targetForm) {
+                        const idField = targetForm.querySelector('input[type="text"][readonly]');
+                        if (idField && !idField.value) {
+                            if (targetId.includes('movimiento')) {
+                                idField.value = generateId('TM');
+                            } else if (targetId.includes('costo')) {
+                                idField.value = generateId('TC');
+                            } else if (targetId.includes('categoria')) {
+                                idField.value = generateId('CAT');
+                            } else if (targetId.includes('concepto')) {
+                                idField.value = generateId('CON');
+                            }
+                        }
+                        
+                        // Mostrar el formulario
+                        targetForm.classList.add('active');
+                    }
+                });
+            });
+            
+            // Manejar clic en botones "Cancelar"
+            document.querySelectorAll('.cancel-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const form = this.closest('.data-form');
+                    // Limpiar y ocultar el formulario
+                    form.reset();
+                    form.classList.remove('active');
+                    
+                    // Deshabilitar selects dependientes
+                    const dependentSelects = form.querySelectorAll('select[data-dependent]');
+                    dependentSelects.forEach(select => {
+                        select.disabled = true;
+                        select.innerHTML = '<option value="">Primero seleccione una opción anterior</option>';
+                    });
+                });
+            });
+            
+            // Manejar envío de formularios
+            document.querySelectorAll('.data-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Registro guardado correctamente (simulación)');
+                    // Limpiar el formulario pero mantenerlo visible
+                    this.reset();
+                    
+                    // Generar nuevo ID automático
+                    const idField = this.querySelector('input[type="text"][readonly]');
+                    if (idField) {
+                        if (this.id.includes('movimiento')) {
+                            idField.value = generateId('TM');
+                        } else if (this.id.includes('costo')) {
+                            idField.value = generateId('TC');
+                        } else if (this.id.includes('categoria')) {
+                            idField.value = generateId('CAT');
+                        } else if (this.id.includes('concepto')) {
+                            idField.value = generateId('CON');
+                        }
+                    }
+                    
+                    // Deshabilitar selects dependientes
+                    const dependentSelects = this.querySelectorAll('select[data-dependent]');
+                    dependentSelects.forEach(select => {
+                        select.disabled = true;
+                        select.innerHTML = '<option value="">Primero seleccione una opción anterior</option>';
+                    });
+                });
+            });
+            
+            // Manejar cambios en los selects dependientes
+            const tipoMovimientoSelects = document.querySelectorAll('select[name="id_tipo_movimiento"]');
+            tipoMovimientoSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    // Habilitar selects dependientes cuando se selecciona un tipo de movimiento
+                    const form = this.closest('form');
+                    const dependentSelects = form.querySelectorAll('select[data-dependent]');
+                    
+                    dependentSelects.forEach(dependentSelect => {
+                        if (this.value) {
+                            dependentSelect.disabled = false;
+                            // Simular opciones (en una app real, se cargarían desde una API)
+                            if (dependentSelect.id.includes('costo')) {
+                                dependentSelect.innerHTML = `
+                                    <option value="">Seleccione un tipo de costo</option>
+                                    <option value="1">Fijo</option>
+                                    <option value="2">Variable</option>
+                                `;
+                            }
+                        } else {
+                            dependentSelect.disabled = true;
+                            dependentSelect.innerHTML = '<option value="">Primero seleccione una opción anterior</option>';
+                        }
+                    });
+                });
+            });
+            
+            // Manejar cambios en selects de tipo de costo para habilitar categorías
+            document.querySelectorAll('select[id$="costo-fk"]').forEach(select => {
+                select.addEventListener('change', function() {
+                    const form = this.closest('form');
+                    const categoriaSelect = form.querySelector('select[id$="categoria-fk"]');
+                    
+                    if (this.value && categoriaSelect) {
+                        categoriaSelect.disabled = false;
+                        // Simular opciones (en una app real, se cargarían desde una API)
+                        categoriaSelect.innerHTML = `
+                            <option value="">Seleccione una categoría</option>
+                            <option value="1">Vivienda</option>
+                            <option value="2">Alimentación</option>
+                            <option value="3">Transporte</option>
+                            <option value="4">Entretenimiento</option>
+                        `;
+                    } else if (categoriaSelect) {
+                        categoriaSelect.disabled = true;
+                        categoriaSelect.innerHTML = '<option value="">Primero seleccione un tipo de costo</option>';
+                    }
+                });
+            });
+        });
+        
+    </script>
+        
+</body>
+</html>
