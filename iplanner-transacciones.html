@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPlanner - Transacciones</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-bg: #f8f9fa;
+            --dark-text: #2c3e50;
+            --light-text: #7f8c8d;
+            --border-color: #ddd;
+        }
+        
+        /* Filtros de transacciones */
+        .transaction-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .search-filter {
+            flex: 2;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+        
+        .filter-group input, .filter-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+        
+        .filter-actions {
+            display: flex;
+            align-items: flex-end;
+        }
+        
+        /* Modal de formularios flotantes */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--light-bg);
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--light-text);
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        /* Badges para estados y prioridades */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-pendiente {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-pagado {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .priority-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .priority-alta {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .priority-media {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .priority-baja {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        /* Botones de acción en tabla */
+        .btn-pagar {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .btn-pagar:hover {
+            background: #219653;
+        }
+        
+        /* Formularios */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            flex: 1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-wallet app-icon"></i>
+            <div class="app-info">
+                <span class="app-name">iPlanner</span>
+                <span class="app-tagline">Gestión Financiera Personal</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <span class="nav-heading">MENÚ</span>
+            <ul>
+                <li><a href="iplanner-dashboard.html"><i class="fas fa-th-large nav-icon"></i><div class="nav-text">Dashboard<small>Resumen mensual</small></div></a></li>
+                <li class="active"><a href="#"><i class="fas fa-exchange-alt nav-icon"></i><div class="nav-text">Transacciones<small>Gestión de movimientos</small></div></a></li>
+                <li><a href="iplanner-catalogos.html"><i class="fas fa-database nav-icon"></i><div class="nav-text">Datos Base<small>Catálogos del sistema</small></div></a></li>
+                <li><a href="iplanner-reportes.html"><i class="fas fa-chart-pie nav-icon"></i><div class="nav-text">Reportes<small>Informes y estadísticas</small></div></a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="container">
+        <header class="page-header">
+            <div class="header-content">
+                <i class="fas fa-exchange-alt header-icon"></i>
+                <div class="header-text">
+                    <h1 class="page-title">Gestión de Transacciones</h1>
+                    <p class="page-subtitle">Administra tus Ingresos y Gastos</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="header-title-container">
+                    <i class="fas fa-list card-icon"></i>
+                    <h2>Lista de Transacciones</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="add-btn secondary-add-btn" id="btn-registrar-pago">
+                        <i class="fas fa-money-bill-wave"></i> <span class="btn-text">Registrar Pago</span>
+                    </button>
+                    <button class="add-btn primary-add-btn" id="btn-nueva-transaccion">
+                        <i class="fas fa-plus"></i> <span class="btn-text">Nueva Transacción</span>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="transaction-filters">
+                    <div class="filter-group search-filter">
+                        <label for="search-concepto">Buscar por concepto:</label>
+                        <input type="text" id="search-concepto" placeholder="Buscar por concepto...">
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-tipo">Tipo movimiento:</label>
+                        <select id="filter-tipo">
+                            <option value="">Todos</option>
+                            <option value="ingreso">Ingreso</option>
+                            <option value="gasto">Gasto</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-estado">Estado:</label>
+                        <select id="filter-estado">
+                            <option value="">Todos</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="pagado">Pagado</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn secondary-btn" id="btn-limpiar-filtros">
+                            <i class="fas fa-broom"></i> Limpiar Filtros
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Concepto</th>
+                                <th>Monto</th>
+                                <th>Periodo</th>
+                                <th>Fecha Límite</th>
+                                <th>Estado</th>
+                                <th>Prioridad</th>
+                                <th>Plazos</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="10" class="empty-message">No hay transacciones registradas</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Registrar Pago -->
+    <div class="modal-overlay" id="modal-registrar-pago">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Registrar Pago</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="select-transaccion">Seleccionar Transacción:</label>
+                    <select id="select-transaccion">
+                        <option value="">Seleccionar transacción</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="monto-pago">Monto del Pago:</label>
+                    <input type="number" id="monto-pago" step="0.01" min="0" value="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="fecha-pago">Fecha del Pago:</label>
+                    <input type="date" id="fecha-pago">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn secondary-btn cancel-modal">Cancelar</button>
+                    <button type="button" class="btn primary-btn" id="btn-confirmar-pago">Registrar Pago</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Nueva Transacción -->
+    <div class="modal-overlay" id="modal-nueva-transaccion">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Nueva Transacción</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-nueva-transaccion">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transaccion-id">ID:</label>
+                            <input type="text" id="transaccion-id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaccion-fecha">Fecha:</label>
+                            <input type="date" id="transaccion-fecha" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transaccion-tipo">Tipo:</label>
+                            <select id="transaccion-tipo" required>
+                                <option value="">Seleccionar tipo</option>
+                                <option value="ingreso">Ingreso</option>
+                                <option value="gasto">Gasto</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaccion-monto">Monto:</label>
+                            <input type="number" id="transaccion-monto" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transaccion-concepto">Concepto:</label>
+                        <select id="transaccion-concepto" required>
+                            <option value="">Seleccionar concepto</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transaccion-mes-periodo">Mes Periodo:</label>
+                            <select id="transaccion-mes-periodo" required>
+                                <option value="">Seleccionar mes</option>
+                                <option value="1">Enero</option>
+                                <option value="2">Febrero</option>
+                                <option value="3">Marzo</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Mayo</option>
+                                <option value="6">Junio</option>
+                                <option value="7">Julio</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Septiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaccion-anio-periodo">Año Periodo:</label>
+                            <input type="number" id="transaccion-anio-periodo" min="2020" max="2030" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transaccion-dia-corte">Día Corte:</label>
+                            <input type="number" id="transaccion-dia-corte" min="1" max="31" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaccion-dia-limite">Día Límite:</label>
+                            <input type="number" id="transaccion-dia-limite" min="1" max="31" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transaccion-estado">Estado:</label>
+                            <select id="transaccion-estado" required>
+                                <option value="pendiente">Pendiente</option>
+                                <option value="pagado">Pagado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaccion-prioridad">Prioridad:</label>
+                            <select id="transaccion-prioridad" required>
+                                <option value="baja">Baja</option>
+                                <option value="media">Media</option>
+                                <option value="alta">Alta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaccion-plazos">Plazos:</label>
+                            <input type="number" id="transaccion-plazos" min="0" value="0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transaccion-notas">Notas:</label>
+                        <textarea id="transaccion-notas"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn secondary-btn cancel-modal">Cancelar</button>
+                        <button type="submit" class="btn primary-btn">Guardar Transacción</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <button class="menu-toggle" aria-label="Toggle navigation menu">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Referencias a modales
+            const modalRegistrarPago = document.getElementById('modal-registrar-pago');
+            const modalNuevaTransaccion = document.getElementById('modal-nueva-transaccion');
+            
+            // Botones para abrir modales
+            document.getElementById('btn-registrar-pago').addEventListener('click', function() {
+                modalRegistrarPago.classList.add('active');
+            });
+            
+            document.getElementById('btn-nueva-transaccion').addEventListener('click', function() {
+                // Generar ID automático
+                const randomNum = Math.floor(Math.random() * 9000) + 1000;
+                document.getElementById('transaccion-id').value = 'TXN' + randomNum;
+                
+                // Establecer fecha actual por defecto
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('transaccion-fecha').value = today;
+                
+                // Establecer año actual por defecto
+                const currentYear = new Date().getFullYear();
+                document.getElementById('transaccion-anio-periodo').value = currentYear;
+                
+                modalNuevaTransaccion.classList.add('active');
+            });
+            
+            // Cerrar modales
+            document.querySelectorAll('.modal-close, .cancel-modal').forEach(button => {
+                button.addEventListener('click', function() {
+                    modalRegistrarPago.classList.remove('active');
+                    modalNuevaTransaccion.classList.remove('active');
+                });
+            });
+            
+            // Cerrar modal al hacer clic fuera del contenido
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Limpiar filtros
+            document.getElementById('btn-limpiar-filtros').addEventListener('click', function() {
+                document.getElementById('search-concepto').value = '';
+                document.getElementById('filter-tipo').value = '';
+                document.getElementById('filter-estado').value = '';
+            });
+            
+            // Calcular fecha límite automáticamente
+            function calcularFechaLimite() {
+                const diaLimite = parseInt(document.getElementById('transaccion-dia-limite').value);
+                const mesPeriodo = parseInt(document.getElementById('transaccion-mes-periodo').value);
+                const anioPeriodo = parseInt(document.getElementById('transaccion-anio-periodo').value);
+                const diaCorte = parseInt(document.getElementById('transaccion-dia-corte').value);
+                
+                if (diaLimite && mesPeriodo && anioPeriodo) {
+                    let mesLimite = mesPeriodo;
+                    let anioLimite = anioPeriodo;
+                    
+                    // Validación: si día corte es mayor que día límite, el mes es el siguiente
+                    if (diaCorte > diaLimite) {
+                        mesLimite = mesPeriodo + 1;
+                        if (mesLimite > 12) {
+                            mesLimite = 1;
+                            anioLimite = anioPeriodo + 1;
+                        }
+                    }
+                    
+                    // Formatear fecha límite (solo para mostrar, no se guarda)
+                    const fechaLimite = new Date(anioLimite, mesLimite - 1, diaLimite);
+                    console.log('Fecha límite calculada:', fechaLimite.toLocaleDateString());
+                }
+            }
+            
+            // Event listeners para calcular fecha límite automáticamente
+            document.getElementById('transaccion-dia-limite').addEventListener('change', calcularFechaLimite);
+            document.getElementById('transaccion-mes-periodo').addEventListener('change', calcularFechaLimite);
+            document.getElementById('transaccion-anio-periodo').addEventListener('change', calcularFechaLimite);
+            document.getElementById('transaccion-dia-corte').addEventListener('change', calcularFechaLimite);
+            
+            // Envío del formulario de nueva transacción
+            document.getElementById('form-nueva-transaccion').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Calcular fecha límite antes de enviar
+                calcularFechaLimite();
+                
+                alert('Transacción guardada correctamente (simulación)');
+                this.reset();
+                modalNuevaTransaccion.classList.remove('active');
+            });
+            
+            // Confirmar pago
+            document.getElementById('btn-confirmar-pago').addEventListener('click', function() {
+                alert('Pago registrado correctamente (simulación)');
+                modalRegistrarPago.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
