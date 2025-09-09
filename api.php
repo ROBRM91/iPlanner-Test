@@ -240,4 +240,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
 $conn->close();
 echo json_encode($response);
 ?>
-
