@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 } else {
     // Redirige al usuario a la página de catálogos
     echo "✅ ¡Conexión exitosa a la base de datos **" . $dbname . "**!";
-    header("Location: iplanner-catalogos.html");
+    // header("Location: iplanner-catalogos.html");
     exit(); // Es importante usar exit() después de una redirección
 }
 ?>
